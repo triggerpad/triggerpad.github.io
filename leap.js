@@ -12,9 +12,9 @@ $(document).ready(function() {
     	for (var i = 0; i < frame.gestures.length; i++) {
       		var gesture = frame.gestures[i];
 
-      		if(gesture.type === "screenTap") {
+      		if(gesture.type === "keyTap") {
 	      		var gesture_x = gesture.position[0].toFixed(digits);
-	      		var gesture_y = gesture.position[1].toFixed(digits);
+	      		var gesture_y = gesture.position[2].toFixed(digits);
 
       			if (withinBounds(gesture_x, gesture_y)) {
 
@@ -24,7 +24,7 @@ $(document).ready(function() {
 	          		gestureString += gesture_y + ", key: " + key;
 	                console.log(gestureString);
 
-	                animateKey(key, gesture_x, gesture_y-190);
+	                animateKey(key, gesture_x, gesture_y);
 	                playKey(key);
 	            }
           	}
@@ -35,7 +35,7 @@ $(document).ready(function() {
     	for (var i = 0; i < frame.pointables.length; i++) {
       		var pointable = frame.pointables[i];
 	      	points[i] = {x: pointable.tipPosition[0].toFixed(digits),
-      					y: pointable.tipPosition[1].toFixed(digits)};
+      					y: pointable.tipPosition[2].toFixed(digits)};
       	}
       	animateKey(key, points);
 	});
@@ -94,23 +94,23 @@ function animatePoints(key, points) {
 }
 
 function withinBounds(x, y) {
-	return(x >= -150 && x <= 150 && y >= 40 && y <= 340);
+	return(x >= -150 && x <= 150 && y >= -150 && y <= 150);
 }
 
 function mapKey(x, y) {
 	if(x < -50) {
-		if(y < 140) return 7;
-		if(y > 240) return 1;
+		if(y < -50) return 7;
+		if(y > 50) return 1;
 		return 4;
 	}
 	else if(x > 50) {
-		if(y < 140) return 9;
-		if(y > 240) return 3;
+		if(y < -50) return 9;
+		if(y > 50) return 3;
 		return 6;
 	}
 	else {
-		if(y < 140) return 8;
-		if(y > 240) return 2;
+		if(y < -50) return 8;
+		if(y > 50) return 2;
 		return 5;
 	}
 }
