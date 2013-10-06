@@ -50,31 +50,31 @@ function playKey(key) {
 
 	switch(key) {
 		case 1: 
-			playSound("sounds/Clap01.wav");
+			playSound("BEATS/1.wav");
 			break;
 		case 2:
-			playSound("sounds/Clap02.wav");
+			playSound("BEATS/2.wav");
 			break;
 		case 3:
-			playSound("sounds/ClHat01.wav");
+			playSound("BEATS/3.wav");
 			break;
 		case 4:
-			playSound("sounds/Kick02.wav");
+			playSound("BEATS/4.wav");
 			break;
 		case 5:
-			playSound("sounds/Kick04.wav");
+			playSound("BEATS/5.wav");
 			break;
 		case 6:
-			playSound("sounds/OpHat02.wav");
+			playSound("BEATS/6.wav");
 			break;
 		case 7:
-			playSound("sounds/OpHat03.wav");
+			playSound("BEATS/7.wav");
 			break;
 		case 8:
-			playSound("sounds/Snr01.wav");
+			playSound("BEATS/8.wav");
 			break;
 		case 9: 
-			playSound("sounds/Snr08.wav");
+			playSound("BEATS/9.wav");
 			break;
 		default:
 	}
