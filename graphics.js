@@ -11,6 +11,7 @@ var fingertipBuffers, fingertipCBuffers;
 
 /****************** CALLBACK FUNCTIONS *****************/
 function updateFingertips(points) {
+    console.log(points);
     _w = gl.viewportWidth;
     _h = gl.viewportHeight;
     fingertips = [];

@@ -24,7 +24,7 @@ $(document).ready(function() {
 	          		gestureString += gesture_y + ", key: " + key;
 	                console.log(gestureString);
 
-	                animateKey(key, gesture_x, gesture_y);
+	                //animateKey(key, gesture_x, gesture_y);
 	                playKey(key);
 	            }
           	}
@@ -37,7 +37,7 @@ $(document).ready(function() {
 	      	points[i] = {x: pointable.tipPosition[0].toFixed(digits),
       					y: pointable.tipPosition[2].toFixed(digits)};
       	}
-      	animateKey(key, points);
+      	updateFingertips(points);
 	});
 
 	//gestures
@@ -85,13 +85,6 @@ function playKey(key) {
         mp3.play();
     }
 
-function animateKey(key) {
-	// animates key b/c it's playing
-}
-
-function animatePoints(key, points) {
-	// animates the fingers that are in the frame
-}
 
 function withinBounds(x, y) {
 	return(x >= -150 && x <= 150 && y >= -150 && y <= 150);
