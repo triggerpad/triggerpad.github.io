@@ -50,31 +50,31 @@ function playKey(key) {
 
 	switch(key) {
 		case 1: 
-			playSound("BEATS/1.wav");
+			playSound("Piano/G.wav");
 			break;
 		case 2:
-			playSound("BEATS/2.wav");
+			playSound("Piano/A.wav");
 			break;
 		case 3:
-			playSound("BEATS/3.wav");
+			playSound("Piano/B.wav");
 			break;
 		case 4:
-			playSound("BEATS/4.wav");
+			playSound("Piano/C.wav");
 			break;
 		case 5:
-			playSound("BEATS/5.wav");
+			playSound("Piano/D.wav");
 			break;
 		case 6:
-			playSound("BEATS/6.wav");
+			playSound("Piano/E.wav");
 			break;
 		case 7:
-			playSound("BEATS/7.wav");
+			playSound("Piano/Gb.wav");
 			break;
 		case 8:
-			playSound("BEATS/8.wav");
+			playSound("sounds/Clap01.wav");
 			break;
 		case 9: 
-			playSound("BEATS/9.wav");
+			playSound("sounds/Kick02.wav");
 			break;
 		default:
 	}
