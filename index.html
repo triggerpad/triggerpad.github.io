@@ -1,12 +1,40 @@
-<html>
-  <head>
-    <title>Trigger Pad</title>
-    <script src="./graphics.js"></script>
-    <script src="http://js.leapmotion.com/0.2.1/leap.min.js"></script>
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-    <script src="./leap.js"></script>
-  </head>
-  <body>
-    <canvas id="glcanvas"></canvas>
-  </body>
+<html> 
+    <head>
+	<script type="text/javascript" src="glMatrix-0.9.5.min.js"></script>
+	<script src="http://js.leapmotion.com/0.2.1/leap.min.js"></script>
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script type="text/javascript" src="graphics.js"></script>
+	<script type="text/javascript" src="game.js"></script>
+	<script type="text/javascript" src="leap.js"></script>
+	<script id="shader-fs" type="x-shader/x-fragment">
+	    precision mediump float;
+
+	    varying vec4 vColor;
+
+	    void main(void) {
+		gl_FragColor = vColor;
+	    }
+	</script>
+	<script id="shader-vs" type="x-shader/x-vertex">
+	    attribute vec3 aVertexPosition;
+	    attribute vec4 aVertexColor;
+
+	    uniform mat4 uMVMatrix;
+	    uniform mat4 uPMatrix;
+
+	    varying vec4 vColor;
+
+	    void main(void) {
+		gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+		vColor = aVertexColor;
+	    }
+	</script>
+    </head>
+
+    <body onload="webGLStart();" align="center">
+	<h1>TriggerPad</h1>
+	<canvas id="canvas" style="border: none;" width="800" height="800"></canvas>
+    </body>
 </html>
+
+
