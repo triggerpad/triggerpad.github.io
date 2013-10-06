@@ -2,8 +2,7 @@ $(document).ready(function() {
 
 
 	var controller = new Leap.Controller({enableFeatures: true}); 
-	var canvas = document.getElementById('canvas');
-	var c = canvas.getContext('2d'); 
+	var glcanvas = document.getElementById('glcanvas');
 
 	controller.on('connect', function() {
 	  console.log("Successfully connected.");
@@ -16,13 +15,11 @@ $(document).ready(function() {
 	});
 
 
-  	var img = document.createElement('img');
-  	img.src = "./wat.jpg"
-	c.drawImage(img, 0, 0);
 
 	controller.on('ready', function(){
 	// Ready code will go here
 		console.log("Ready");
+
 	});
 
 	controller.connect();
