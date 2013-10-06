@@ -65,16 +65,16 @@ function playKey(key) {
 			playSound("Piano/D.wav");
 			break;
 		case 6:
-			playSound("Piano/E.wav");
+			playSound("Piano/D.wav");
 			break;
 		case 7:
-			playSound("Piano/Gb.wav");
+			playSound("Piano/E.wav");
 			break;
 		case 8:
-			playSound("sounds/Clap01.wav");
+			playSound("Piano/F.wav");
 			break;
 		case 9: 
-			playSound("sounds/Kick02.wav");
+			playSound("Piano/Gb.wav");
 			break;
 		default:
 	}
