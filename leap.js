@@ -78,10 +78,6 @@ function playKey(key) {
 			break;
 		default:
 	}
-
-
-	
-
 }
 
 	function playSound(soundfile) {
