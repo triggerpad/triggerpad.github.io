@@ -1,3 +1,61 @@
+// Width and height of the grid used by leap.js
+const leap_w = 300, leap_h = 300;
+
+// z-value of all the points
+const z = -800;
+
+// List of fingertip coordinates
+var fingertips;
+// List of fingertip buffers
+var fingertipBuffers, fingertipCBuffers;
+
+/****************** CALLBACK FUNCTIONS *****************/
+function updateFingertips(points) {
+    _w = gl.viewportWidth;
+    _h = gl.viewportHeight;
+    fingertips = [];
+    for (i = 0; i < points.length; i++) {
+	fingertips.push(points[i]);
+    }
+
+    /* Scale the coordinates */
+    for (i = 0; i < fingertips.length; i++) {
+	fingertips[i].x *= _w / leap_w;
+	fingertips[i].y *= _h / leap_h;
+    }
+
+    /* Recreate buffers */
+    initSquareBuffers();
+}
+
+/****************** RENDERING FUNCTIONS *****************/
+function initSquareBuffers() {
+    var buf, cbuf;
+    fingertipBuffers = [];
+    for (i = 0; i < fingertips.length; i++) {
+	x = fingertips[i].x;
+	y = fingertips[i].y;
+	l = 30;
+	fingertipBuffers.push(initSingleBuffer(
+	    [x-l/2, y+l/2, z+5, x-l/2, y-l/2, z+5, x+l/2, y+l/2, z+5, x+l/2, y-l/2, z+5]
+	));
+    }
+
+    fingertipCBuffers = [];
+    var _BLACK = [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1];
+    for (i = 0; i < fingertips.length; i++) {
+	fingertipCBuffers.push(initSingleCBuffer(_BLACK));
+    }
+}
+
+function drawFingertips() {
+    for (i = 0; i < fingertips.length; i++) {
+	drawSingleBuffer(fingertipBuffers[i], fingertipCBuffers[i]);
+    }
+}
+
+
+/****************** GL STUFF *****************/
 var gl;
 function initGL(canvas) {
     try {
@@ -82,9 +140,9 @@ function setMatrixUniforms() {
     gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
 }
 
+/* Vertex and color buffers for each grid cell */
 var buf1, buf2, buf3, buf4, buf5, buf6, buf7, buf8, buf9;
 var cbuf1, cbuf2, cbuf3, cbuf4, cbuf5, cbuf6, cbuf7, cbuf8, cbuf9;
-var z = -500;
 
 function initSingleBuffer(vertices) {
     var buf = gl.createBuffer();
@@ -149,6 +207,7 @@ function drawScene() {
     mat4.perspective(60, gl.viewportWidth / gl.viewportHeight, 10, 1000.0, pMatrix);
     mat4.identity(mvMatrix);
 
+    /* Draw the grid */
     drawSingleBuffer(buf1, cbuf1);
     drawSingleBuffer(buf2, cbuf2);
     drawSingleBuffer(buf3, cbuf3);
@@ -158,6 +217,9 @@ function drawScene() {
     drawSingleBuffer(buf7, cbuf7);
     drawSingleBuffer(buf8, cbuf8);
     drawSingleBuffer(buf9, cbuf9);
+
+    /* Draw fingertips markers */
+    drawFingertips();
 }
 
 function webGLStart() {
@@ -169,6 +231,16 @@ function webGLStart() {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
 
+    pt1 = {
+	x: 0,
+	y: 0
+    }
+    pt2 = {
+	x: 100, 
+	y: 100
+    }
+
+    updateFingertips([pt1, pt2]);
     drawScene();
 }
 
