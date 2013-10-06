@@ -2,16 +2,43 @@
 const leap_w = 300, leap_h = 300;
 
 // z-value of all the points
-const z = -800;
+//const z = -700;
+const z = 0;
 
 // List of fingertip coordinates
 var fingertips;
 // List of fingertip buffers
 var fingertipBuffers, fingertipCBuffers;
 
+// Colors for fingertips and cell[1-9]
+var COLOR_TIP = [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1];
+var COLOR_CELL = [];
+
+// Randomize colors
+function randomColor() {
+    var color = [];
+    for (i = 0; i < 16; i++) 
+	if (i % 4 == 3)
+	    color.push(1);
+	else
+	    color.push(1 - Math.random());
+    return color;
+}
+
+function randomizeColor() {
+    // Randomize colors if there is a key hit
+    newColors = [];
+    var k;
+    for (k = 0; k < 9; k++)  {
+	newColors.push(randomColor());
+    }
+
+    COLOR_CELL = newColors;
+    initBuffers();
+}
+
 /****************** CALLBACK FUNCTIONS *****************/
 function updateFingertips(points) {
-    console.log(points);
     _w = gl.viewportWidth;
     _h = gl.viewportHeight;
     fingertips = [];
@@ -22,11 +49,15 @@ function updateFingertips(points) {
     /* Scale the coordinates */
     for (i = 0; i < fingertips.length; i++) {
 	fingertips[i].x *= _w / leap_w;
-	fingertips[i].y *= _h / leap_h;
+	/* Invert y coordinates */
+	fingertips[i].y *= _h / leap_h * -1;
     }
 
     /* Recreate buffers */
     initSquareBuffers();
+
+    /* Redraw */ 
+    drawScene();
 }
 
 /****************** RENDERING FUNCTIONS *****************/
@@ -43,9 +74,8 @@ function initSquareBuffers() {
     }
 
     fingertipCBuffers = [];
-    var _BLACK = [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1];
     for (i = 0; i < fingertips.length; i++) {
-	fingertipCBuffers.push(initSingleCBuffer(_BLACK));
+	fingertipCBuffers.push(initSingleCBuffer(COLOR_TIP));
     }
 }
 
@@ -177,15 +207,15 @@ function initBuffers() {
     buf8 = initSingleBuffer([-w/6, -h/6, z, -w/6, -h/2, z, w/6, -h/6, z, w/6, -h/2, z]);
     buf9 = initSingleBuffer([w/6, -h/6, z, w/6, -h/2, z, w/2, -h/6, z, w/2, -h/2, z]);
 
-    cbuf1 = initSingleCBuffer([1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1]);
-    cbuf2 = initSingleCBuffer([0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]);
-    cbuf3 = initSingleCBuffer([0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1]);
-    cbuf4 = initSingleCBuffer([0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]);
-    cbuf5 = initSingleCBuffer([0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1]);
-    cbuf6 = initSingleCBuffer([1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1]);
-    cbuf7 = initSingleCBuffer([0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1]);
-    cbuf8 = initSingleCBuffer([1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1]);
-    cbuf9 = initSingleCBuffer([0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]);
+    cbuf1 = initSingleCBuffer(COLOR_CELL[0]);
+    cbuf2 = initSingleCBuffer(COLOR_CELL[1]);
+    cbuf3 = initSingleCBuffer(COLOR_CELL[2]);
+    cbuf4 = initSingleCBuffer(COLOR_CELL[3]);
+    cbuf5 = initSingleCBuffer(COLOR_CELL[4]);
+    cbuf6 = initSingleCBuffer(COLOR_CELL[5]);
+    cbuf7 = initSingleCBuffer(COLOR_CELL[6]);
+    cbuf8 = initSingleCBuffer(COLOR_CELL[7]);
+    cbuf9 = initSingleCBuffer(COLOR_CELL[8]);
 }
 
 function drawSingleBuffer(buf, cbuf) {
@@ -201,12 +231,20 @@ function drawSingleBuffer(buf, cbuf) {
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, buf.numItems);
 }
 
+function degToRad(deg) {
+    return deg * Math.PI / 180;
+}
+
 function drawScene() {
     gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    mat4.perspective(60, gl.viewportWidth / gl.viewportHeight, 10, 1000.0, pMatrix);
+    /* Tilt the screen */ 
+    mat4.identity(pMatrix);
+    mat4.perspective(60, gl.viewportWidth / gl.viewportHeight, 10, 5000, pMatrix);
+    mat4.translate(pMatrix, [0, 0, -1000]);
     mat4.identity(mvMatrix);
+    mat4.rotate(mvMatrix, degToRad(-40), [1, 0, 0]);
 
     /* Draw the grid */
     drawSingleBuffer(buf1, cbuf1);
@@ -232,16 +270,7 @@ function webGLStart() {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
 
-    pt1 = {
-	x: 0,
-	y: 0
-    }
-    pt2 = {
-	x: 100, 
-	y: 100
-    }
-
-    updateFingertips([pt1, pt2]);
+    randomizeColor();
     drawScene();
 }
 

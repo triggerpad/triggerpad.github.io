@@ -22,9 +22,9 @@ $(document).ready(function() {
 	      	   		var gestureString = "Gesture ID: " + gesture.id + ", ";
 	          		gestureString += "position: " + gesture_x + ", ";
 	          		gestureString += gesture_y + ", key: " + key;
-	                console.log(gestureString);
 
 	                //animateKey(key, gesture_x, gesture_y);
+			randomizeColor();
 	                playKey(key);
 	            }
           	}
