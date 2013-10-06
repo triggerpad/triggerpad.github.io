@@ -1,4 +1,5 @@
 var digits = 1;
+var mp3 = null;
 
 $(document).ready(function() {
 
@@ -24,7 +25,7 @@ $(document).ready(function() {
 	                console.log(gestureString);
 
 	                animateKey(key, gesture_x, gesture_y-190);
-	                playSound(key);
+	                playKey(key);
 	            }
           	}
       	}
@@ -33,10 +34,10 @@ $(document).ready(function() {
       	var points = new Array();
     	for (var i = 0; i < frame.pointables.length; i++) {
       		var pointable = frame.pointables[i];
-	      	points[i] = [pointable.tipPosition[0].toFixed(digits), pointable.tipPosition[1].toFixed(digits)];
+	      	points[i] = {x: pointable.tipPosition[0].toFixed(digits),
+      					y: pointable.tipPosition[1].toFixed(digits)};
       	}
       	animateKey(key, points);
-
 	});
 
 	//gestures
@@ -44,44 +45,49 @@ $(document).ready(function() {
 });
 
 
-
-function playSound(key) {
+function playKey(key) {
 	// plays audio sound associated with that key
 
 	switch(key) {
 		case 1: 
+			playSound("sounds/Clap01.wav");
 			break;
 		case 2:
+			playSound("sounds/Clap02.wav");
 			break;
 		case 3:
+			playSound("sounds/ClHat01.wav");
 			break;
 		case 4:
+			playSound("sounds/Kick02.wav");
 			break;
 		case 5:
+			playSound("sounds/Kick04.wav");
 			break;
 		case 6:
+			playSound("sounds/OpHat02.wav");
 			break;
 		case 7:
+			playSound("sounds/OpHat03.wav");
 			break;
 		case 8:
+			playSound("sounds/Snr01.wav");
 			break;
 		case 9: 
+			playSound("sounds/Snr08.wav");
 			break;
 		default:
 	}
 
-	/* function playSound(el,soundfile) {
-    if (el.mp3) {
-        if(el.mp3.paused) el.mp3.play();
-        else el.mp3.pause();
-    } else {
-        el.mp3 = new Audio(soundfile);
-        el.mp3.play();
-    }
-    }
-	*/
+
+	
 
 }
+
+	function playSound(soundfile) {
+    	mp3 = new Audio(soundfile);
+        mp3.play();
+    }
 
 function animateKey(key) {
 	// animates key b/c it's playing
